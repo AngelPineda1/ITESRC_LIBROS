@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITESRC_LIBROSAPI", "ITESRC_LIBROSAPI\ITESRC_LIBROSAPI.csproj", "{6A36BD29-35EF-4332-9D14-BC6CA96AE3BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A36BD29-35EF-4332-9D14-BC6CA96AE3BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A36BD29-35EF-4332-9D14-BC6CA96AE3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A36BD29-35EF-4332-9D14-BC6CA96AE3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A36BD29-35EF-4332-9D14-BC6CA96AE3BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E97C04A0-845D-4C03-8133-ECBF6183B96F}
+	EndGlobalSection
+EndGlobal
