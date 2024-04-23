@@ -29,15 +29,15 @@ public partial class ItesrcneLibrosContext : DbContext
 
         modelBuilder.Entity<Libros>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("libros");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("libros");
 
             entity.HasIndex(e => e.Id, "libros_Id_IDX");
 
+            entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Autor).HasMaxLength(100);
             entity.Property(e => e.FechaActualizacion).HasColumnType("datetime");
-            entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Portada).HasMaxLength(100);
             entity.Property(e => e.Titulo).HasMaxLength(100);
         });

@@ -5,7 +5,7 @@ namespace ITESRC_LIBROSAPI.Models.Entities;
 
 public partial class Libros
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     public string Titulo { get; set; } = null!;
 

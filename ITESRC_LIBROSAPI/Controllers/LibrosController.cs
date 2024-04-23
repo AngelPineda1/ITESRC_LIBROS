@@ -1,4 +1,5 @@
-﻿using ITESRC_LIBROSAPI.Models.DTOs;
+﻿using FluentValidation;
+using ITESRC_LIBROSAPI.Models.DTOs;
 using ITESRC_LIBROSAPI.Models.Entities;
 using ITESRC_LIBROSAPI.Models.Validators;
 using ITESRC_LIBROSAPI.Repositories;
@@ -33,7 +34,7 @@ namespace ITESRC_LIBROSAPI.Controllers
                 {
                     Id = 0,
                     Eliminado=false,
-                    FechaActualizacion=DateTime.Now,
+                    FechaActualizacion=DateTime.UtcNow,
                     Autor=libro.Autor,
                     Titulo=libro.Titulo,
                     Portada=libro.Portada,
@@ -45,6 +46,63 @@ namespace ITESRC_LIBROSAPI.Controllers
             return BadRequest(resultados.Errors.Select(x=>x.ErrorMessage));
             
 
+        }
+        [HttpGet("{fecha?}")]
+        public IActionResult Get(DateTime? fecha)
+        {
+            var libros = Repository.GetAll()
+                .Where(x=>fecha==null || x.FechaActualizacion >fecha)
+                .OrderBy(x=>x.Titulo)
+                .Select(x=>new LibroDto
+                {
+                    Id=x.Id,
+                    Titulo=x.Titulo,
+                    Eliminado=x.Eliminado,
+                    Portada=x.Portada,
+                    Autor=x.Autor
+                });
+
+            return Ok(libros);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(LibroDto dto)
+        {
+            var resultados=validator.Validate(dto);
+            if (resultados.IsValid)
+            {
+                var entidad=Repository.Get(dto.Id??0);
+                if (entidad == null ||entidad.Eliminado==true)
+                {
+                    return NotFound();
+                }
+                else {
+                    entidad.Titulo=dto.Titulo;
+                    entidad.Autor=dto.Autor;
+                    entidad.Portada=dto.Portada;
+                    entidad.FechaActualizacion=DateTime.UtcNow;
+                    Repository.Update(entidad);
+                    return Ok();
+                }
+
+                
+            }
+            return BadRequest(resultados.Errors.Select(x => x.ErrorMessage));
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var entidad=Repository.Get(id);
+            if (entidad == null ||entidad.Eliminado == true)
+            {
+                return NotFound();
+            }
+            entidad.Eliminado=true; 
+            entidad.FechaActualizacion = DateTime.UtcNow;
+            Repository.Update(entidad);
+
+            return Ok();
         }
     }
 }
