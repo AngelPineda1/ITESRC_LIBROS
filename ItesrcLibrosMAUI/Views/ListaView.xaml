@@ -4,7 +4,7 @@
              x:Class="ItesrcLibrosMAUI.Views.ListaView"
              Title="Lista de libros">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Nuevo"></ToolbarItem>
+        <ToolbarItem Text="Nuevo" Command="{Binding NuevoCommand}"></ToolbarItem>
     </ContentPage.ToolbarItems>
     <VerticalStackLayout>
         <ListView>

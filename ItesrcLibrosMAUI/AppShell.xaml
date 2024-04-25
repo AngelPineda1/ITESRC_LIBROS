@@ -9,8 +9,11 @@
     Shell.BackgroundColor="Aqua"
     Shell.TitleColor="White"
     
-    xmlns:views="clr-namespace:ItesrcLibrosMAUI.Views">
-
+    xmlns:views="clr-namespace:ItesrcLibrosMAUI.Views"
+    xmlns:viewmodel="clr-namespace:ItesrcLibrosMAUI.ViewModels">
+    <Shell.BindingContext>
+        <viewmodel:LibrosViewModel></viewmodel:LibrosViewModel>
+    </Shell.BindingContext>
     <ShellContent
     ContentTemplate="{DataTemplate views:ListaView}"
     Route="Lista" />
