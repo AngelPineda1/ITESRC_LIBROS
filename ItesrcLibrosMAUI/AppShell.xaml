@@ -4,11 +4,24 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ItesrcLibrosMAUI"
-    Shell.FlyoutBehavior="Disabled">
+    Shell.FlyoutBehavior="Disabled"
+    Shell.ForegroundColor="White"
+    Shell.BackgroundColor="Aqua"
+    Shell.TitleColor="White"
+    
+    xmlns:views="clr-namespace:ItesrcLibrosMAUI.Views">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    ContentTemplate="{DataTemplate views:ListaView}"
+    Route="Lista" />
+
+
+    <ShellContent
+    ContentTemplate="{DataTemplate views:EditarView}"
+    Route="Editar" />
+
+    <ShellContent
+    ContentTemplate="{DataTemplate views:AgregarView}"
+    Route="Agregar" />
 
 </Shell>
