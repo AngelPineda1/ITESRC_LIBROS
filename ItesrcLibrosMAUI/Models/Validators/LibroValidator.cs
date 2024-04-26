@@ -20,7 +20,12 @@ namespace ItesrcLibrosMAUI.Models.Validators
 
         private bool ValidarURl(string url)
         {
-            return url.StartsWith("https://") && url.EndsWith(".jpg");
+            if (url != null)
+            {
+                return url.StartsWith("https://") && url.EndsWith(".jpg");
+
+            }
+            return false;
         }
-    }
+        }
 }

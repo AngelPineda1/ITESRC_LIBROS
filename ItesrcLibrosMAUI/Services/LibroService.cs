@@ -1,4 +1,5 @@
 ﻿using ItesrcLibrosMAUI.Models.Dtos;
+using ItesrcLibrosMAUI.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace ItesrcLibrosMAUI.Services
     public class LibroService
     {
         HttpClient client;
+        Repositories.LibroRepository libroRepository=new();
         public LibroService()
         {
             client = new HttpClient()
@@ -41,7 +43,43 @@ namespace ItesrcLibrosMAUI.Services
 
         public async Task GetLibros()
         {
+            try
+            {
+                var response = await client.GetFromJsonAsync<List<LibroDto>>("api/libros");
+                foreach (var libro in response)
+                {
+                    var entidad = libroRepository.Get(libro.Id??0);
+                    if (entidad == null && libro.Eliminado==false)
+                    {
+                        entidad=new()
+                        {
+                            Id=libro.Id??0,
+                            Titulo=libro.Titulo,
+                            Autor=libro.Autor,
+                            Portada=libro.Portada
+                        };
+                        libroRepository.Insert(entidad);
+                    }
+                    else
+                    {
+                        if (entidad.Eliminado)
+                        {
+                            libroRepository.Delete(entidad);
 
+                        }
+                        else
+                        {
+                            libroRepository.Update(entidad);
+                        }
+                    }
+                   
+
+                }
+
+            }catch (Exception ex)
+            {
+
+            }
         }
     }
 }
