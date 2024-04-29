@@ -15,5 +15,6 @@ namespace ItesrcLibrosMAUI.Models.Dtos
 
         public string Portada { get; set; } = null!;
         public bool Eliminado { get; set; }
+        public DateTime Fecha { get; set; } 
     }
 }

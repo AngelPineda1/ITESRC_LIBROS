@@ -14,7 +14,7 @@ namespace ItesrcLibrosMAUI.Services
     public class LibroService
     {
         HttpClient client;
-        Repositories.LibroRepository libroRepository=new();
+        Repositories.LibroRepository libroRepository = new();
         public LibroService()
         {
             client = new HttpClient()
@@ -43,40 +43,48 @@ namespace ItesrcLibrosMAUI.Services
 
         public async Task GetLibros()
         {
+
             try
             {
-                var response = await client.GetFromJsonAsync<List<LibroDto>>("api/libros");
-                foreach (var libro in response)
+                var fecha = Preferences.Get("UltimaFechaActualizacion", DateTime.MinValue);
+                var response = await client.GetFromJsonAsync<List<LibroDto>>($"api/libros/{fecha:yyyy-MM-dd}T{fecha:HH:mm:ss}");
+                if (response != null)
                 {
-                    var entidad = libroRepository.Get(libro.Id??0);
-                    if (entidad == null && libro.Eliminado==false)
-                    {
-                        entidad=new()
-                        {
-                            Id=libro.Id??0,
-                            Titulo=libro.Titulo,
-                            Autor=libro.Autor,
-                            Portada=libro.Portada
-                        };
-                        libroRepository.Insert(entidad);
-                    }
-                    else
-                    {
-                        if (entidad.Eliminado)
-                        {
-                            libroRepository.Delete(entidad);
 
+                    foreach (var libro in response)
+                    {
+                        var entidad = libroRepository.Get(libro.Id ?? 0);
+                        if (entidad == null && libro.Eliminado == false)
+                        {
+                            entidad = new()
+                            {
+                                Id = libro.Id ?? 0,
+                                Titulo = libro.Titulo,
+                                Autor = libro.Autor,
+                                Portada = libro.Portada
+                            };
+                            libroRepository.Insert(entidad);
                         }
                         else
                         {
-                            libroRepository.Update(entidad);
-                        }
-                    }
-                   
+                            if (entidad.Eliminado)
+                            {
+                                libroRepository.Delete(entidad);
 
+                            }
+                            else
+                            {
+                                libroRepository.Update(entidad);
+                            }
+                        }
+
+
+                    }
+                    Preferences.Set("UltimaFechaActualizacion", response.Max(x => x.Fecha));
                 }
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
 
             }
