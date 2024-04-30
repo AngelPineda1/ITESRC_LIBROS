@@ -40,14 +40,15 @@ namespace ItesrcLibrosMAUI.Services
                 throw new Exception(errores);
             }
         }
-
+        public event Action? DatosActualizados;
         public async Task GetLibros()
         {
 
             try
             {
                 var fecha = Preferences.Get("UltimaFechaActualizacion", DateTime.MinValue);
-                var response = await client.GetFromJsonAsync<List<LibroDto>>($"api/libros/{fecha:yyyy-MM-dd}T{fecha:HH:mm:ss}");
+                bool aviso = false;
+                var response = await client.GetFromJsonAsync<List<LibroDto>>($"api/libros/{fecha:yyyy-MM-dd}/{fecha:HH}/{fecha:mm}");
                 if (response != null)
                 {
 
@@ -64,21 +65,39 @@ namespace ItesrcLibrosMAUI.Services
                                 Portada = libro.Portada
                             };
                             libroRepository.Insert(entidad);
+                            aviso= true;
                         }
                         else
                         {
-                            if (entidad.Eliminado)
+                            if (entidad != null)
                             {
-                                libroRepository.Delete(entidad);
 
-                            }
-                            else
-                            {
-                                libroRepository.Update(entidad);
+                                if (libro.Eliminado)
+                                {
+                                    libroRepository.Delete(entidad);
+                                    aviso = true;
+
+                                }
+                                else
+                                {
+                                    if(libro.Titulo!=entidad.Titulo||libro.Autor!=entidad.Autor||libro.Portada!=entidad.Portada)
+                                    {
+                                        aviso = true;
+                                        libroRepository.Update(entidad);
+                                    }
+                                }
                             }
                         }
 
 
+                    }
+                    if (aviso)
+                    {
+                        _=MainThread.InvokeOnMainThreadAsync(() =>
+                        {
+
+                            DatosActualizados?.Invoke();
+                        });
                     }
                     Preferences.Set("UltimaFechaActualizacion", response.Max(x => x.Fecha));
                 }

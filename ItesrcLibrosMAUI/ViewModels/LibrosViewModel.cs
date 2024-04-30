@@ -29,7 +29,12 @@ namespace ItesrcLibrosMAUI.ViewModels
         public LibrosViewModel()
         {
             ActualizarLibros();
-            
+            App.LibroService.DatosActualizados += LibroService_DatosActualizados;
+        }
+
+        private void LibroService_DatosActualizados()
+        {
+            ActualizarLibros();
         }
 
         [ObservableProperty]
